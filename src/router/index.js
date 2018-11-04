@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import IndexPage from '@/components/index-page'
+import Recommend from '@/components/recommend/recommend'
+import Singer from '@/components/singer/singer'
+import Rank from '@/components/rank/rank'
+import Search from '@/components/search/search'
 
 Vue.use(Router)
 
@@ -9,8 +13,28 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'IndexPage',
-      component: IndexPage
+      redirect: '/recommend'
+    },
+    {
+      path: '/recommend',
+      name: 'Recommend',
+      component: Recommend
+    },
+    {
+      path: '/singer',
+      name: 'Singer',
+      component: Singer
+    },
+    {
+      path: '/rank',
+      name: 'Rank',
+      component: Rank
+    }
+    ,
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     }
   ]
 })
