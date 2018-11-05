@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import IndexPage from '@/components/index-page'
+/* import IndexPage from '@/components/index-page' */
 import Recommend from '@/components/recommend/recommend'
 import Singer from '@/components/singer/singer'
 import Rank from '@/components/rank/rank'

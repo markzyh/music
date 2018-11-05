@@ -1,6 +1,6 @@
 <template>
   <div class="Recommend">
-      Recommend
+      <img v-for="(item,index) in slider" :key="index" :src="item.picUrl" alt="">
   </div>
 </template>
 
@@ -12,7 +12,7 @@ export default {
   name: 'Recommend',
   data () {
     return {
-
+      slider:[]
     }
   },
   created(){
@@ -20,18 +20,12 @@ export default {
   },
   methods:{
     _getRecommend(){
-      getRecommend().then((res) =>{
+      getRecommend().then(res =>{
         if( res.code === ERR_OK){
-          console.log(0)
-          console.log(res.data.slider)
+          this.slider = res.data.slider
+          console.log(this.slider)
         }
       })
-      /* axios.get('https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg')
-      .then(res =>{
-        console.log(res)
-      }).catch(err =>{
-        console.log(err)
-      }) */
     }
   } 
 }
