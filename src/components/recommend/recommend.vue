@@ -20,7 +20,7 @@ export default {
   },
   methods:{
     _getRecommend(){
-      getRecommend().then(res =>{
+       getRecommend().then(res =>{
         if( res.code === ERR_OK){
           this.slider = res.data.slider
           console.log(this.slider)
