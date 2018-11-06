@@ -1,55 +1,59 @@
 <template>
-  <div class="slider" ref="sliderGroup">
-    <div class="slider-wrap">
-      <div v-for="(item,index) in sliders" :key="index" class="slider-panel">
-        <a :href="item.linkUrl">
-          <img  :src="item.picUrl" alt="">
-        </a>
-      </div>
-    </div> 
-  </div>
+  <div class="slider">
+    <swiper :options="swiperOption">
+      <swiper-slide v-for="(item, index) in sliders" :key="index">
+        <a :href="item.linkUrl"><img :src="item.picUrl" alt=""></a>
+      </swiper-slide>
+      <div class="swiper-pagination" slot="pagination"></div>
+    </swiper>
+  </div> 
 </template>
 
 <script>
-import Bscroll from "better-scroll";
+import "swiper/dist/css/swiper.css";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   name: "Slider",
   props: {
     sliders: {
       type: Array
-    },
-    loop: {
-      type: Boolean,
-      default: false
-    },
-    autoPlay: {
-      type: Boolean,
-      default: false
-    },
-    interval: {
-        type: Number,
-        default: 2000
     }
   },
-  mounted(){   
-      setTimeout( ()=>{
-        this.setSliderWidth()
-      },20)
+  components: {
+    swiper,
+    swiperSlide
   },
-  methods:{
-      setSliderWidth(){
-        let clientWidth = ''
-        this.children = this.$refs.sliderGroup.children
-        console.log(this.children)
-        clientWidth = this.$refs.sliderGroup.clientWidth//窗口宽度
-        this.children.style.width = clientWidth
-        //console.log(this.$refs.sliderGroup.children.style.width)
-        console.log(this.children.length)
-      }
+  mounted() {
+    /* setInterval(() => {
+        //console.log('simulate async data')
+        if (this.swiperSlides.length < 10) {
+          this.swiperSlides.push(this.swiperSlides.length + 1)
+        }
+      }, 3000) */
+  },
+  methods: {},
+  destroyed() {
+    this.swiperOption.autoplay = false;
   },
   data() {
     return {
-        children:''
+      swiperOption: {
+        pagination: {
+          el: ".swiper-pagination"
+        },
+        loop: true,
+        autoplay: {
+          disableOnInteraction: true,
+          delay : 1000,
+        },
+/*         on: {
+          touchEnd: function(event) {
+            this.autoplay.start = true
+            console.log(0)
+          }
+        } */
+      },
+      swiperSlides: [1, 2]
     };
   }
 };
@@ -57,18 +61,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
-
-.slider{
+.slider {
   width: 100%;
-  .slider-panel{
+  .slider-panel {
     width: 100%;
     height: 100%;
   }
-  img{
+  img {
     width: 100%;
   }
 }
-.slider-wrap{
-
+.slider-wrap {
 }
 </style>
