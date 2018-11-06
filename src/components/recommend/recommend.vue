@@ -1,29 +1,38 @@
 <template>
-  <div class="Recommend">
-      <img v-for="(item,index) in slider" :key="index" :src="item.picUrl" alt="">
+  <div class="recommend">
+      <slider :sliders="slider" v-if="slider.length">
+
+      </slider>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import Slider from '@/base/slider/slider'
 import {getRecommend} from '@/api/recommend'
 import {ERR_OK} from '@/api/config'
 export default {
   name: 'Recommend',
+  components:{
+    Slider
+  },
   data () {
     return {
       slider:[]
     }
   },
-  created(){
+  /* created(){
+    this._getRecommend()
+  }, */
+  mounted(){
     this._getRecommend()
   },
   methods:{
     _getRecommend(){
-       getRecommend().then(res =>{
-        if( res.code === ERR_OK){
+      getRecommend().then(res =>{
+        if(res.code == ERR_OK){
           this.slider = res.data.slider
-          console.log(this.slider)
+          //console.log(res.data.slider)
         }
       })
     }
