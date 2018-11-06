@@ -1,7 +1,6 @@
 <template>
   <div class="recommend">
       <slider :sliders="slider" v-if="slider.length">
-
       </slider>
   </div>
 </template>
