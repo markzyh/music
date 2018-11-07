@@ -1,21 +1,28 @@
 <template>
   <div class="recommend">
-      <slider :sliders="slider" v-if="slider.length">
-      </slider>
-      <ul class="recommend-disc"> 
-        <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid">
-          <div class="recommend-disc-img">
-               <img :src="item.imgurl" :alt="item.creator.name">
-          </div>
-          <div class="recommend-disc-text">
-            <h3>{{item.creator.name}}</h3>
-            <p>{{item.dissname}}</p>
-          </div> 
-        </router-link>
-      </ul>
+    <scroll class="recommend-content" v-if='musicDiscList.length'>
+      <div>
+        <slider :sliders="slider" v-if="slider.length">
+        </slider>
+        <ul class="recommend-disc"> 
+          <!-- <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid"> -->
+          <li  v-for="(item,index) in musicDiscList" :key="index" >
+            <div class="recommend-disc-img">
+                <img :src="item.imgurl" :alt="item.creator.name">
+            </div>
+            <div class="recommend-disc-text">
+              <h3>{{item.creator.name}}</h3>
+              <p>{{item.dissname}}</p>
+            </div> 
+          </li>
+          <!-- </router-link> -->
+        </ul>
+        </div>
+      </scroll>
   </div>
 </template>
 <script>
+import Scroll from '@/base/scroll/scroll'
 import axios from 'axios'
 import Slider from '@/base/slider/slider'
 import {getRecommend,getDiscList} from '@/api/recommend'
@@ -23,7 +30,7 @@ import {ERR_OK} from '@/api/config'
 export default {
   name: 'Recommend',
   components:{
-    Slider
+    Slider,Scroll
   },
   data () {
     return {

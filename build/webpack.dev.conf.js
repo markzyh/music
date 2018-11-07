@@ -57,22 +57,23 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     },
     before(app) {
-      app.get('/api/getDiscList', (req, res) => {//req是请求端,即recommend.js
-        const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
-        axios.get(url, {
-          headers: {
-            referer: 'https://c.y.qq.com/',
-            host: 'c.y.qq.com'
-          },
-          params: req.query //这是请求的query
-        }).then((response) => {
-          //response是QQ地址返回的，数据在data里。
-          res.json(response.data)
-        }).catch((e) => {
-          console.log(e);
-        })
-      });
-      
+      app.get('/api/getDiscList',(req,res) =>{//req是请求/api/getDiscList时的数据,res是请求后返回的数据
+        const url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+        axios.get(url,
+            {
+              headers: {
+                  referer: 'https://c.y.qq.com/',
+                  host: 'c.y.qq.com'
+                },
+              params:req.query//请求本地路径时传入的参数
+
+            }
+          ).then(response =>{//response是qq接口返回的数据
+            return res.json(response.data)//.json()买看懂,意思是把远端接口的数据赋值给本地接口返回的数据
+          }).catch(err =>{
+            console.log(err)
+          })
+      }) 
     },
   },
   plugins: [
