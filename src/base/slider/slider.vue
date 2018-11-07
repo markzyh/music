@@ -33,7 +33,6 @@ export default {
   },
   methods: {},
   destroyed() {
-    this.swiperOption.autoplay = false;
   },
   data() {
     return {
@@ -41,17 +40,13 @@ export default {
         pagination: {
           el: ".swiper-pagination"
         },
-        loop: true,
+        loop: true,        
         autoplay: {
-          disableOnInteraction: true,
-          delay : 1000,
+          delay: 3000,
+          disableOnInteraction: false,
         },
-/*         on: {
-          touchEnd: function(event) {
-            this.autoplay.start = true
-            console.log(0)
-          }
-        } */
+        observer:true,//修改swiper自己或子元素时，自动初始化swiper 
+        observeParents:false,//修改swiper的父元素时，自动初始化swiper 
       },
       swiperSlides: [1, 2]
     };
