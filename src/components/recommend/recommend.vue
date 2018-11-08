@@ -1,8 +1,8 @@
 <template>
   <div class="recommend">
-    <scroll class="recommend-content" v-if='musicDiscList.length'>
+    <scroll class="recommend-content" :data='musicDiscList' ref="scroll"><!--  -->
       <div>
-        <slider :sliders="slider" v-if="slider.length">
+        <slider :sliders="slider" v-if="slider.length" @load-image="onLoadImage">
         </slider>
         <ul class="recommend-disc"> 
           <!-- <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid"> -->
@@ -46,6 +46,9 @@ export default {
     this._getDiscList()
   },
   methods:{
+    onLoadImage(){
+     //this.$refs.scroll.refresh()
+    },
     _getRecommend(){
       getRecommend().then(res =>{
         if(res.code == ERR_OK){
@@ -67,7 +70,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
+.recommend-content{
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
 .recommend-disc{
+  //padding-bottom: 87px;
   li{
     display: -ms-flexbox;
     display: flex;

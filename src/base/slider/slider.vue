@@ -2,7 +2,7 @@
   <div class="slider">
     <swiper :options="swiperOption">
       <swiper-slide v-for="(item, index) in sliders" :key="index">
-        <a :href="item.linkUrl"><img :src="item.picUrl" alt=""></a>
+        <a :href="item.linkUrl"><img :src="item.picUrl" alt="" @load="loadImage"></a>
       </swiper-slide>
       <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
@@ -31,7 +31,11 @@ export default {
         }
       }, 3000) */
   },
-  methods: {},
+  methods: {
+    loadImage(){
+      this.$emit('load-image')
+    }
+  },
   destroyed() {
   },
   data() {
