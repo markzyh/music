@@ -4,18 +4,19 @@
       <div>
         <slider :sliders="slider" v-if="slider.length" @load-image="onLoadImage">
         </slider>
+        <h1>热门歌单推荐</h1>
         <ul class="recommend-disc"> 
-          <!-- <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid"> -->
-          <li  v-for="(item,index) in musicDiscList" :key="index" >
+          <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid">
+          <!-- <li  v-for="(item,index) in musicDiscList" :key="index" > -->
             <div class="recommend-disc-img">
-                <img :src="item.imgurl" :alt="item.creator.name">
+                <img v-lazy="item.imgurl" :alt="item.creator.name">
             </div>
             <div class="recommend-disc-text">
               <h3>{{item.creator.name}}</h3>
               <p>{{item.dissname}}</p>
             </div> 
-          </li>
-          <!-- </router-link> -->
+          <!-- </li> -->
+          </router-link>
         </ul>
         </div>
       </scroll>
@@ -47,7 +48,8 @@ export default {
   },
   methods:{
     onLoadImage(){
-     //this.$refs.scroll.refresh()
+      console.log('lodimage')
+     this.$refs.scroll.refresh()
     },
     _getRecommend(){
       getRecommend().then(res =>{
@@ -70,6 +72,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
+h1{
+    height: 65px;
+    line-height: 65px;
+    text-align: center;
+    font-size: 14px;
+    color: #ffcd32;
+}
 .recommend-content{
   position: fixed;
   width: 100%;
@@ -77,7 +86,7 @@ export default {
   height: 100%;
 }
 .recommend-disc{
-  //padding-bottom: 87px;
+  padding-bottom: 87px;
   li{
     display: -ms-flexbox;
     display: flex;

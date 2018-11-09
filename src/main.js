@@ -6,6 +6,14 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import fastclick from 'fastclick'
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  //error: 'dist/error.png',
+  loading: require('./assets/logo.png'),
+  attempt: 1
+})
 
 Vue.config.productionTip = false
 
