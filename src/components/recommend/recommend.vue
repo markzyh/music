@@ -5,6 +5,7 @@
         <slider :sliders="slider" v-if="slider.length" @load-image="onLoadImage">
         </slider>
         <h1>热门歌单推荐</h1>
+
         <ul class="recommend-disc"> 
           <router-link tag="li" v-for="(item,index) in musicDiscList" :key="index" :to="'/recommend/'+item.dissid">
           <!-- <li  v-for="(item,index) in musicDiscList" :key="index" > -->
@@ -19,10 +20,14 @@
           </router-link>
         </ul>
         </div>
-      </scroll>
+        <div class="loading-container" v-if="!musicDiscList.length">
+          <loading></loading>  
+        </div>
+    </scroll>
   </div>
 </template>
 <script>
+import Loading from'@/base/loading/loading'
 import Scroll from '@/base/scroll/scroll'
 import axios from 'axios'
 import Slider from '@/base/slider/slider'
@@ -31,7 +36,7 @@ import {ERR_OK} from '@/api/config'
 export default {
   name: 'Recommend',
   components:{
-    Slider,Scroll
+    Slider,Scroll,Loading
   },
   data () {
     return {
@@ -44,11 +49,13 @@ export default {
   }, */
   mounted(){
     this._getRecommend()
-    this._getDiscList()
+    setTimeout(() =>{
+      this._getDiscList()
+    },500)
   },
   methods:{
     onLoadImage(){
-      console.log('lodimage')
+      //console.log('lodimage')
      this.$refs.scroll.refresh()
     },
     _getRecommend(){
@@ -62,7 +69,7 @@ export default {
       getDiscList().then(res =>{
         if(res.code == ERR_OK){
           this.musicDiscList = res.data.list
-          console.log(this.musicDiscList)
+          //console.log(this.musicDiscList)
         }
       })
     }

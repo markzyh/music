@@ -30,7 +30,7 @@ export function getDiscList() {
   return axios.get(url,{
       params:data
   }).then(res =>{
-    console.log(res.data)
+    //console.log(res.data)
     //return Promise.resolve(res.data)
     return res.data
   })
