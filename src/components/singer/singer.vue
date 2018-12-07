@@ -1,38 +1,78 @@
 <template>
-  <div class="Singer">
-      Singer
-  </div>
+  <div class="singer">Singer</div>
 </template>
 
 <script>
-import {ERR_OK} from '@/api/config'
-import {getSingerList} from '@/api/singer'
+import { ERR_OK } from "@/api/config";
+import { getSingerList } from "@/api/singer";
 export default {
-  name: 'Singer',
-  data () {
+  name: "Singer",
+  data() {
     return {
-      singerList:[]
-    }
+      singerList: []
+    };
   },
-  mounted(){
-    this._getSingerList()
+  created() {
+    this._getSingerList();
   },
-  methods:{
-    _getSingerList(){
-      getSingerList().then(res =>{
-        if(this.data.code == ERR_OK)
-        console.log(0)
-        console.log(res)
-      }).catch(err =>{
-        console.log(err)
-      })
+  methods: {
+    //处理数组
+    _normaalizeSinger(list) {
+      const HOT_NAME = "热门";
+      const HOT_NAME_LEN = 10;
+      let map = {
+        hot: {
+          title: HOT_NAME,
+          items: []
+        }
+      };
+      //遍历数组
+      list.forEach((items, index) => {
+        if (index < HOT_NAME_LEN) {
+          map.hot.items.push({
+            id: items.Fsinger_mid,
+            name: items.Fsinger_name,
+            pic: `https://y.gtimg.cn/music/photo_new/T001R150x150M00000"${
+              items.Fsinger_mid
+            }.jpg?max_age=2592000`
+          });
+        }
+        //拼音缩写
+        const key = items.Findex;
+        if (!map[key]) {
+          map[key] = {
+            title: key,
+            items: []
+          };
+        }
+        map[key].items.push({
+          id: items.Fsinger_mid,
+          name: items.Fsinger_name,
+          pic: `https://y.gtimg.cn/music/photo_new/T001R150x150M00000"${
+            items.Fsinger_mid
+          }.jpg?max_age=2592000`
+        });
+      });
+      return map;
+    },
+    _getSingerList() {
+      getSingerList()
+        .then(res => {
+          if (res.code == ERR_OK) {
+            this.singerList = res.data.list;
+            console.log(this.singerList);
+
+            console.log(this._normaalizeSinger(this.singerList));
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
-
-  
 </style>
