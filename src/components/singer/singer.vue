@@ -53,7 +53,23 @@ export default {
           }.jpg?max_age=2592000`
         });
       });
-      return map;
+      //处理按拼音排序
+      let hot = [];
+      let ret = [];
+      for(let key in map){
+        let val = map[key]
+        if(val.title === HOT_NAME){
+          hot.push(val)
+        }else if(val.title.match(/[a-zA-Z]/)){
+          ret.push(val)
+        }
+      }
+      //sort方法
+      ret.sort((a,b) =>{
+        return a.title.charCodeAt(0) - b.title.charCodeAt(0) //如果a<b,则a排在前面 
+      })
+      return hot.concat(ret)
+      //return map;
     },
     _getSingerList() {
       getSingerList()
