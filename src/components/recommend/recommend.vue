@@ -91,6 +91,8 @@ h1{
   width: 100%;
   overflow: hidden;
   height: 100%;
+  top: 88px;
+  bottom: 0;
 }
 .recommend-disc{
   padding-bottom: 87px;

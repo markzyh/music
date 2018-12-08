@@ -1,84 +1,91 @@
 <template>
-  <div class="singer">Singer</div>
+  <div class="singer">
+    <list-view :data="singerList"></list-view>
+  </div>
 </template>
 
 <script>
+
+import ListView from "@/base/list-view/list-view";
 import { ERR_OK } from "@/api/config";
 import { getSingerList } from "@/api/singer";
 export default {
   name: "Singer",
+  components: {
+    ListView
+  },
   data() {
     return {
-      singerList: []
+      singerList: [],
     };
   },
   created() {
     this._getSingerList();
   },
   methods: {
-    //处理数组
-    _normaalizeSinger(list) {
-      const HOT_NAME = "热门";
-      const HOT_NAME_LEN = 10;
+    _normalizeSingerList(list) {
+      let HOT_NAME = "热门";
+      let HOT_NAME_LEN = 10;
+      //数据结构,map对象,分为hot,和拼音缩写等
+      //下面是hot
       let map = {
         hot: {
           title: HOT_NAME,
-          items: []
+          item: []
         }
       };
-      //遍历数组
-      list.forEach((items, index) => {
+      list.forEach((item, index) => {
+        //先寫入hot對象
         if (index < HOT_NAME_LEN) {
-          map.hot.items.push({
-            id: items.Fsinger_mid,
-            name: items.Fsinger_name,
-            pic: `https://y.gtimg.cn/music/photo_new/T001R150x150M00000"${
-              items.Fsinger_mid
+          map.hot.item.push({
+            id: item.Fsinger_mid,
+            name: item.Fsinger_name,
+            pic: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${
+              item.Fsinger_mid
             }.jpg?max_age=2592000`
           });
         }
-        //拼音缩写
-        const key = items.Findex;
+        //按照拼音縮寫劃分
+        let key = item.Findex;
         if (!map[key]) {
+          //如果map下索引不存在,就創建
           map[key] = {
-            title: key,
-            items: []
+            title: item.Findex,
+            item: []
           };
         }
-        map[key].items.push({
-          id: items.Fsinger_mid,
-          name: items.Fsinger_name,
-          pic: `https://y.gtimg.cn/music/photo_new/T001R150x150M00000"${
-            items.Fsinger_mid
+        map[key].item.push({
+          id: item.Fsinger_mid,
+          name: item.Fsinger_name,
+          pic: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${
+            item.Fsinger_mid
           }.jpg?max_age=2592000`
         });
       });
-      //处理按拼音排序
-      let hot = [];
-      let ret = [];
-      for(let key in map){
-        let val = map[key]
-        if(val.title === HOT_NAME){
-          hot.push(val)
-        }else if(val.title.match(/[a-zA-Z]/)){
-          ret.push(val)
+      //因為對象是無序的,所以需要把對象轉換為數組----------為啥變成繁體字
+      let hot = []; //热门数组
+      let ret = []; //剩下的数组
+      for (let key in map) {
+        let val = map[key];
+        if (val.title.match(/[a-zA-Z]/)) {
+          ret.push(map[key]);
+        } else if (val.title === HOT_NAME) {
+          hot.push(map[key]);
         }
       }
-      //sort方法
-      ret.sort((a,b) =>{
-        return a.title.charCodeAt(0) - b.title.charCodeAt(0) //如果a<b,则a排在前面 
-      })
-      return hot.concat(ret)
-      //return map;
+      ret.sort((a, b) => {
+        return a.title.charCodeAt(0) - b.title.charCodeAt(0);
+      });
+      return hot.concat(ret);
     },
     _getSingerList() {
       getSingerList()
         .then(res => {
           if (res.code == ERR_OK) {
             this.singerList = res.data.list;
+            // console.log(this.singerList);對象時
+            this.singerList = this._normalizeSingerList(this.singerList); //序列化数据
             console.log(this.singerList);
-
-            console.log(this._normaalizeSinger(this.singerList));
           }
         })
         .catch(err => {
@@ -91,4 +98,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
+.singer{
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+
+  top: 88px;
+  bottom: 0;
+}
 </style>
