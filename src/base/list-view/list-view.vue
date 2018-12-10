@@ -1,8 +1,8 @@
 <template>
   <div class="list-view">
-    <scroll class="singer-content" ref="scroll" v-if="data.length">
+    <scroll class="singer-content" ref="listview" v-if="data.length">
       <div class="singer-lists">
-        <ul class="singer-list-panel" v-for="(item,index) in data" :key="index">
+        <ul class="singer-list-panel" v-for="(item,index) in data" :key="index" ref="listgroup">
           <h3 class="singer-list-title">{{item.title}}</h3>
           <li v-for="(items,indexs) in item.item" :key="indexs">
             <div class="flex">
@@ -12,7 +12,7 @@
           </li>
         </ul>
       </div>
-      <ul class="singer-title-list" @touchstart="onTouchShortcut">
+      <ul class="singer-title-list" @touchstart="onTouchShortcut" @touchmove.stop.prevent="onTouchmoveShortcut">
         <li v-for="(item,index) in shortcutLists" :key="index" :data-index="index">{{item}}</li>
       </ul>
     </scroll>
@@ -24,7 +24,11 @@
 <script>
 import Loading from "@/base/loading/loading";
 import Scroll from "@/base/scroll/scroll";
+let ANCHOR_HEIGHT = 16
 export default {
+  created(){
+    this.touch = {}
+  },
   components: {
     Loading,
     Scroll
@@ -36,9 +40,23 @@ export default {
     }
   },
   methods:{
+    onTouchmoveShortcut(e){
+      let firstTouch = e.touches[0]
+      this.touch.y2 = firstTouch.pageY//获取移动时,y轴的位置
+      let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
+      let index = parseInt(this.touch.index) + delta
+      //console.log(index)
+    },
     onTouchShortcut(e){
-      console.log(e.target.getAttribute('data-index'))
-      return e.target.getAttribute('data-index')
+      let index = e.target.getAttribute('data-index')//获取touch的index
+      let firstTouch = e.touches[0]//
+      this.touch.y1 = firstTouch.pageY//获取开始点击时y轴的位置
+      this.touch.index = index//存入对象中
+      //console.log(this.touch.y1)
+      this._scrollTo(index)//调用better-scroll插件
+    },
+    _scrollTo(index){
+      this.$refs.listview.scrollToElement(this.$refs.listgroup[index],0)
     }
   },
   computed: {
