@@ -36,7 +36,7 @@
       refreshDelay: {
         type: Number,
         default: 20
-      }
+      },
     },
     mounted() {
       setTimeout(() => {
